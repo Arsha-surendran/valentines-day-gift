@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #container {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 85%;
+            width: 350px;
+            transition: all 0.5s ease;
+        }
+
+        h1 { color: #d81b60; font-size: 22px; margin-bottom: 10px; min-height: 60px; }
+        
+        .attempts {
+            font-size: 14px;
+            color: #ad1457;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #yesBtn { background-color: #ff4081; color: white; z-index: 10; }
+        #noBtn { 
+            background-color: #eeeeee; 
+            color: #757575; 
+            white-space: nowrap;
+        }
+
+        img { width: 100%; max-width: 200px; border-radius: 15px; margin-bottom: 15px; height: 200px; object-fit: cover; }
+
+        .footer { margin-top: 25px; font-size: 12px; color: #f06292; font-style: italic; }
+        .love-msg { color: #d81b60; font-weight: bold; font-size: 18px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <img id="displayImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ25vcmUmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Asking">
+        
+        <h1 id="question">Will you be my Valentine, Arsha? 💜</h1>
+        
+        <div id="attemptText" class="attempts">Attempts: 0</div>
+        
+        <div class="btn-container" id="buttonArea">
+            <button id="yesBtn" onclick="nextPage()">YES!</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+        </div>
+
+        <div id="extraSpace"></div>
+        <div class="footer">From your boyfriend</div>
+    </div>
+
+    <script>
+        let count = 0;
+        let currentPage = 1;
+        
+        // List of pleading messages for the No button
+        const noTexts = [
+            "No", 
+            "Please? 🥺", 
+            "One chance again? 🙏", 
+            "Think about it! 💭", 
+            "Are you sure? 💔", 
+            "Don't be mean! 😢", 
+            "Give it a thought! ✨", 
+            "Pretty please? 🎀", 
+            "You're breaking my heart 😭", 
+            "Click YES instead! 👉👈"
+        ];
+
+        function moveButton() {
+            count++;
+            document.getElementById('attemptText').innerHTML = "Attempts: " + count;
+            
+            const btn = document.getElementById('noBtn');
+            
+            // Change the text based on count
+            if (count < noTexts.length) {
+                btn.innerHTML = noTexts[count];
+            } else {
+                btn.innerHTML = "Just say Yes! 🌹";
+            }
+
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function fireConfetti() {
+            var end = Date.now() + (1 * 1000);
+            var colors = ['#ff4081', '#ffffff', '#ff80ab'];
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function nextPage() {
+            fireConfetti();
+
+            if (currentPage === 1) {
+                document.getElementById('question').innerHTML = "YAY!!! Best decision ever! 🥰";
+                document.getElementById('displayImg').src ="https://media.tenor.com/KLjuNj119g0AAAAj/love-love-you.gif";
+                document.getElementById('noBtn').style.display = 'none';
+                document.getElementById('yesBtn').innerHTML = "Click for a surprise! ✨";
+                currentPage = 2;
+            } else {
+                document.getElementById('question').innerHTML = "You're the perfect one for me! 💍";
+                document.getElementById('displayImg').src ="https://media1.tenor.com/m/EabN3OfQu48AAAAd/kkb4-pramik.gif";
+                
+                const loveDiv = document.createElement("div");
+                loveDiv.className = "love-msg";
+                loveDiv.innerHTML = "I Love You Arsha😘❤️";
+                document.getElementById('extraSpace').innerHTML = ""; 
+                document.getElementById('extraSpace').appendChild(loveDiv);
+                
+                document.getElementById('buttonArea').style.display = 'none';
+                document.getElementById('attemptText').style.visibility = 'hidden';
+            }
+        }
+    </script>
+</body>
+</html>
